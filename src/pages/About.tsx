@@ -37,7 +37,7 @@ const About = () => {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">About HSCA</h1>
           <p className="text-xl text-gray-600">
-            Celebrating excellence in cinematic arts education since 2009
+            Celebrating excellence in cinematic arts education since 2025
           </p>
         </div>
 
