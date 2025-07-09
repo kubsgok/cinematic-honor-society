@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Film, Users, Award, Calendar, User, LogOut, ClipboardListIcon } from "lucide-react";
+import { Film, Users, Award, Calendar, User, LogOut, ClipboardListIcon, Settings } from "lucide-react";
 
 const Dashboard = () => {
   const [user] = useState({
@@ -25,6 +25,14 @@ const Dashboard = () => {
     { id: 2, name: "Maria Rodriguez", email: "maria.rodriguez@usc.edu", role: "Vice President", inGoodStanding: true, points: 16, filmMinutes: 22, inductionStatus: "Inducted" },
     { id: 3, name: "David Kim", email: "david.kim@usc.edu", role: "Member", inGoodStanding: false, points: 8, filmMinutes: 12, inductionStatus: "Nominee" },
     { id: 4, name: "Emma Thompson", email: "emma.thompson@usc.edu", role: "Member", inGoodStanding: true, points: 14, filmMinutes: 18, inductionStatus: "Inducted" },
+    { id: 5, name: "James Wilson", email: "james.wilson@usc.edu", role: "Treasurer", inGoodStanding: true, points: 20, filmMinutes: 30, inductionStatus: "Inducted" },
+    { id: 6, name: "Sophia Lee", email: "sophia.lee@usc.edu", role: "Secretary", inGoodStanding: true, points: 15, filmMinutes: 19, inductionStatus: "Inducted" },
+    { id: 7, name: "Michael Brown", email: "michael.brown@usc.edu", role: "Member", inGoodStanding: true, points: 11, filmMinutes: 16, inductionStatus: "Inducted" },
+    { id: 8, name: "Olivia Davis", email: "olivia.davis@usc.edu", role: "Member", inGoodStanding: false, points: 6, filmMinutes: 9, inductionStatus: "Nominee" },
+    { id: 9, name: "Ethan Garcia", email: "ethan.garcia@usc.edu", role: "Member", inGoodStanding: true, points: 13, filmMinutes: 17, inductionStatus: "Inducted" },
+    { id: 10, name: "Ava Martinez", email: "ava.martinez@usc.edu", role: "Member", inGoodStanding: true, points: 17, filmMinutes: 23, inductionStatus: "Inducted" },
+    { id: 11, name: "Noah Johnson", email: "noah.johnson@usc.edu", role: "Member", inGoodStanding: true, points: 9, filmMinutes: 13, inductionStatus: "Inducted" },
+    { id: 12, name: "Isabella Taylor", email: "isabella.taylor@usc.edu", role: "Member", inGoodStanding: false, points: 7, filmMinutes: 10, inductionStatus: "Nominee" },
   ]);
 
   const [recentNews] = useState([
@@ -32,6 +40,8 @@ const Dashboard = () => {
     { id: 2, title: "New Industry Mentorship Program Launch", date: "Dec 10, 2024", category: "Programs" },
     { id: 3, title: "Chapter Leadership Summit Registration Open", date: "Dec 5, 2024", category: "Events" },
   ]);
+
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -45,6 +55,10 @@ const Dashboard = () => {
             </Link>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">Welcome back, {user.name}</span>
+              <Button variant="outline" size="sm" onClick={() => navigate("/profile")}>
+                <User className="h-4 w-4 mr-2" />
+                Profile
+              </Button>
               <Button variant="outline" size="sm">
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
@@ -62,9 +76,8 @@ const Dashboard = () => {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid grid-cols-5 w-full max-w-xl">
+          <TabsList className="grid grid-cols-4 w-full max-w-xl">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="chapter">Chapter</TabsTrigger>
             <TabsTrigger value="manage">Manage Chapter</TabsTrigger>
             <TabsTrigger value="news">News</TabsTrigger>
@@ -142,28 +155,6 @@ const Dashboard = () => {
             </Card>
           </TabsContent>
 
-          {/* Profile Tab */}
-          <TabsContent value="profile" className="space-y-6">
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle>Profile Information</CardTitle>
-                <CardDescription>Manage your personal information and account settings</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Profile fields */}
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div><label className="block text-sm font-medium mb-1">Name</label><p className="text-gray-900">{user.name}</p></div>
-                  <div><label className="block text-sm font-medium mb-1">Email</label><p className="text-gray-900">{user.email}</p></div>
-                  <div><label className="block text-sm font-medium mb-1">School</label><p className="text-gray-900">{user.school}</p></div>
-                  <div><label className="block text-sm font-medium mb-1">Graduation Year</label><p className="text-gray-900">{user.graduationYear}</p></div>
-                  <div><label className="block text-sm font-medium mb-1">Chapter</label><p className="text-gray-900">{user.chapter}</p></div>
-                  <div><label className="block text-sm font-medium mb-1">Role</label><Badge>{user.role}</Badge></div>
-                </div>
-                <Button className="mt-4">Edit Profile</Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
           {/* Chapter Tab */}
           <TabsContent value="chapter" className="space-y-6">
             <Card className="border-0 shadow-lg">
@@ -230,8 +221,8 @@ const Dashboard = () => {
                             </Badge>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap space-x-2">
-                            <Button size="xs">Edit</Button>
-                            <Button variant="outline" size="xs">Copy</Button>
+                            <Button size="sm">Edit</Button>
+                            <Button variant="outline" size="sm">Copy</Button>
                           </td>
                         </tr>
                       ))}
