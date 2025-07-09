@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Film, Users, Award, Calendar, User, LogOut } from "lucide-react";
+import { Film, Users, Award, Calendar, User, LogOut, ClipboardListIcon } from "lucide-react";
 
 const Dashboard = () => {
   const [user] = useState({
@@ -22,10 +21,10 @@ const Dashboard = () => {
   });
 
   const [chapterMembers] = useState([
-    { id: 1, name: "Alex Chen", role: "President", points: 18, filmMinutes: 25, status: "Inducted" },
-    { id: 2, name: "Maria Rodriguez", role: "Vice President", points: 16, filmMinutes: 22, status: "Inducted" },
-    { id: 3, name: "David Kim", role: "Member", points: 8, filmMinutes: 12, status: "Nominee" },
-    { id: 4, name: "Emma Thompson", role: "Member", points: 14, filmMinutes: 18, status: "Inducted" },
+    { id: 1, name: "Alex Chen", email: "alex.chen@usc.edu", role: "President", inGoodStanding: true, points: 18, filmMinutes: 25, inductionStatus: "Inducted" },
+    { id: 2, name: "Maria Rodriguez", email: "maria.rodriguez@usc.edu", role: "Vice President", inGoodStanding: true, points: 16, filmMinutes: 22, inductionStatus: "Inducted" },
+    { id: 3, name: "David Kim", email: "david.kim@usc.edu", role: "Member", inGoodStanding: false, points: 8, filmMinutes: 12, inductionStatus: "Nominee" },
+    { id: 4, name: "Emma Thompson", email: "emma.thompson@usc.edu", role: "Member", inGoodStanding: true, points: 14, filmMinutes: 18, inductionStatus: "Inducted" },
   ]);
 
   const [recentNews] = useState([
@@ -63,21 +62,23 @@ const Dashboard = () => {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid grid-cols-4 w-full max-w-md">
+          <TabsList className="grid grid-cols-5 w-full max-w-xl">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="profile">Profile</TabsTrigger>
             <TabsTrigger value="chapter">Chapter</TabsTrigger>
+            <TabsTrigger value="manage">Manage Chapter</TabsTrigger>
             <TabsTrigger value="news">News</TabsTrigger>
           </TabsList>
 
+          {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
             {/* Status Cards */}
             <div className="grid md:grid-cols-3 gap-6">
+              {/* Points Card */}
               <Card className="border-0 shadow-lg">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg flex items-center">
-                    <Award className="h-5 w-5 mr-2 text-blue-600" />
-                    Points
+                    <Award className="h-5 w-5 mr-2 text-blue-600" /> Points
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -87,11 +88,11 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
 
+              {/* Film Minutes Card */}
               <Card className="border-0 shadow-lg">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg flex items-center">
-                    <Film className="h-5 w-5 mr-2 text-blue-600" />
-                    Film Minutes
+                    <Film className="h-5 w-5 mr-2 text-blue-600" /> Film Minutes
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -101,11 +102,11 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
 
+              {/* Status Card */}
               <Card className="border-0 shadow-lg">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg flex items-center">
-                    <User className="h-5 w-5 mr-2 text-blue-600" />
-                    Status
+                    <User className="h-5 w-5 mr-2 text-blue-600" /> Status
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -125,26 +126,23 @@ const Dashboard = () => {
               <CardContent>
                 <div className="grid md:grid-cols-4 gap-4">
                   <Button variant="outline" className="h-auto p-4 flex flex-col">
-                    <Film className="h-6 w-6 mb-2" />
-                    Submit Film
+                    <Film className="h-6 w-6 mb-2" /> Submit Film
                   </Button>
                   <Button variant="outline" className="h-auto p-4 flex flex-col">
-                    <Award className="h-6 w-6 mb-2" />
-                    Log Points
+                    <Award className="h-6 w-6 mb-2" /> Log Points
                   </Button>
                   <Button variant="outline" className="h-auto p-4 flex flex-col">
-                    <Users className="h-6 w-6 mb-2" />
-                    View Chapter
+                    <Users className="h-6 w-6 mb-2" /> View Chapter
                   </Button>
                   <Button variant="outline" className="h-auto p-4 flex flex-col">
-                    <Calendar className="h-6 w-6 mb-2" />
-                    Events
+                    <Calendar className="h-6 w-6 mb-2" /> Events
                   </Button>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
 
+          {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-6">
             <Card className="border-0 shadow-lg">
               <CardHeader>
@@ -152,37 +150,21 @@ const Dashboard = () => {
                 <CardDescription>Manage your personal information and account settings</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                {/* Profile fields */}
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Name</label>
-                    <p className="text-gray-900">{user.name}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Email</label>
-                    <p className="text-gray-900">{user.email}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">School</label>
-                    <p className="text-gray-900">{user.school}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Graduation Year</label>
-                    <p className="text-gray-900">{user.graduationYear}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Chapter</label>
-                    <p className="text-gray-900">{user.chapter}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Role</label>
-                    <Badge>{user.role}</Badge>
-                  </div>
+                  <div><label className="block text-sm font-medium mb-1">Name</label><p className="text-gray-900">{user.name}</p></div>
+                  <div><label className="block text-sm font-medium mb-1">Email</label><p className="text-gray-900">{user.email}</p></div>
+                  <div><label className="block text-sm font-medium mb-1">School</label><p className="text-gray-900">{user.school}</p></div>
+                  <div><label className="block text-sm font-medium mb-1">Graduation Year</label><p className="text-gray-900">{user.graduationYear}</p></div>
+                  <div><label className="block text-sm font-medium mb-1">Chapter</label><p className="text-gray-900">{user.chapter}</p></div>
+                  <div><label className="block text-sm font-medium mb-1">Role</label><Badge>{user.role}</Badge></div>
                 </div>
                 <Button className="mt-4">Edit Profile</Button>
               </CardContent>
             </Card>
           </TabsContent>
 
+          {/* Chapter Tab */}
           <TabsContent value="chapter" className="space-y-6">
             <Card className="border-0 shadow-lg">
               <CardHeader>
@@ -198,19 +180,9 @@ const Dashboard = () => {
                         <p className="text-sm text-gray-600">{member.role}</p>
                       </div>
                       <div className="flex items-center space-x-4 text-sm">
-                        <div className="text-center">
-                          <div className="font-medium">{member.points}</div>
-                          <div className="text-gray-500">Points</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="font-medium">{member.filmMinutes}</div>
-                          <div className="text-gray-500">Minutes</div>
-                        </div>
-                        <Badge 
-                          className={member.status === "Inducted" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}
-                        >
-                          {member.status}
-                        </Badge>
+                        <div className="text-center"><div className="font-medium">{member.points}</div><div className="text-gray-500">Points</div></div>
+                        <div className="text-center"><div className="font-medium">{member.filmMinutes}</div><div className="text-gray-500">Minutes</div></div>
+                        <Badge className={member.inductionStatus === "Inducted" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>{member.inductionStatus}</Badge>
                       </div>
                     </div>
                   ))}
@@ -219,6 +191,58 @@ const Dashboard = () => {
             </Card>
           </TabsContent>
 
+          {/* Manage Chapter Tab */}
+          <TabsContent value="manage" className="space-y-6">
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle>Chapter Management</CardTitle>
+                <CardDescription>Manage induction status, points, film minutes, and membership</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">In Good Standing</th>
+                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
+                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Film Minutes</th>
+                        <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Induction Status</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {chapterMembers.map((member) => (
+                        <tr key={member.id}>
+                          <td className="px-6 py-4 whitespace-nowrap">{member.name}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-gray-600 text-sm">{member.email}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-gray-600 text-sm">{member.role}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-center">
+                            <input type="checkbox" defaultChecked={member.inGoodStanding} />
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right">{member.points}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right">{member.filmMinutes}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-center">
+                            <Badge className={member.inductionStatus === "Inducted" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>
+                              {member.inductionStatus}
+                            </Badge>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap space-x-2">
+                            <Button size="xs">Edit</Button>
+                            <Button variant="outline" size="xs">Copy</Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* News Tab */}
           <TabsContent value="news" className="space-y-6">
             <Card className="border-0 shadow-lg">
               <CardHeader>
