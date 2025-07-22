@@ -6,13 +6,15 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Film, Users, Award, Calendar, User, LogOut, ClipboardListIcon, Settings } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 const Dashboard = () => {
   const [user] = useState({
-    name: "Sarah Johnson",
-    email: "sarah.johnson@usc.edu",
-    school: "University of Southern California",
-    chapter: "USC Chapter",
+    name: "Kabir Goklani",
+    email: "sarah.johnson@sas.edu",
+    school: "Singapore American School",
+    chapter: "SAS Chapter",
     role: "Member",
     points: 12,
     filmMinutes: 15,
@@ -20,19 +22,19 @@ const Dashboard = () => {
     graduationYear: "2025"
   });
 
-  const [chapterMembers] = useState([
-    { id: 1, name: "Alex Chen", email: "alex.chen@usc.edu", role: "President", inGoodStanding: true, points: 18, filmMinutes: 25, inductionStatus: "Inducted" },
-    { id: 2, name: "Maria Rodriguez", email: "maria.rodriguez@usc.edu", role: "Vice President", inGoodStanding: true, points: 16, filmMinutes: 22, inductionStatus: "Inducted" },
-    { id: 3, name: "David Kim", email: "david.kim@usc.edu", role: "Member", inGoodStanding: false, points: 8, filmMinutes: 12, inductionStatus: "Nominee" },
-    { id: 4, name: "Emma Thompson", email: "emma.thompson@usc.edu", role: "Member", inGoodStanding: true, points: 14, filmMinutes: 18, inductionStatus: "Inducted" },
-    { id: 5, name: "James Wilson", email: "james.wilson@usc.edu", role: "Treasurer", inGoodStanding: true, points: 20, filmMinutes: 30, inductionStatus: "Inducted" },
-    { id: 6, name: "Sophia Lee", email: "sophia.lee@usc.edu", role: "Secretary", inGoodStanding: true, points: 15, filmMinutes: 19, inductionStatus: "Inducted" },
-    { id: 7, name: "Michael Brown", email: "michael.brown@usc.edu", role: "Member", inGoodStanding: true, points: 11, filmMinutes: 16, inductionStatus: "Inducted" },
-    { id: 8, name: "Olivia Davis", email: "olivia.davis@usc.edu", role: "Member", inGoodStanding: false, points: 6, filmMinutes: 9, inductionStatus: "Nominee" },
-    { id: 9, name: "Ethan Garcia", email: "ethan.garcia@usc.edu", role: "Member", inGoodStanding: true, points: 13, filmMinutes: 17, inductionStatus: "Inducted" },
-    { id: 10, name: "Ava Martinez", email: "ava.martinez@usc.edu", role: "Member", inGoodStanding: true, points: 17, filmMinutes: 23, inductionStatus: "Inducted" },
-    { id: 11, name: "Noah Johnson", email: "noah.johnson@usc.edu", role: "Member", inGoodStanding: true, points: 9, filmMinutes: 13, inductionStatus: "Inducted" },
-    { id: 12, name: "Isabella Taylor", email: "isabella.taylor@usc.edu", role: "Member", inGoodStanding: false, points: 7, filmMinutes: 10, inductionStatus: "Nominee" },
+  const [chapterMembers, setChapterMembers] = useState([
+    { id: 1, name: "Alex Chen", email: "alex.chen@sas.edu", role: "President", inGoodStanding: true, points: 18, filmMinutes: 25, inductionStatus: "Inducted" },
+    { id: 2, name: "Maria Rodriguez", email: "maria.rodriguez@sas.edu", role: "Vice President", inGoodStanding: true, points: 16, filmMinutes: 22, inductionStatus: "Inducted" },
+    { id: 3, name: "David Kim", email: "david.kim@sas.edu", role: "Member", inGoodStanding: false, points: 8, filmMinutes: 12, inductionStatus: "Nominee" },
+    { id: 4, name: "Emma Thompson", email: "emma.thompson@sas.edu", role: "Member", inGoodStanding: true, points: 14, filmMinutes: 18, inductionStatus: "Inducted" },
+    { id: 5, name: "James Wilson", email: "james.wilson@sas.edu", role: "Treasurer", inGoodStanding: true, points: 20, filmMinutes: 30, inductionStatus: "Inducted" },
+    { id: 6, name: "Sophia Lee", email: "sophia.lee@sas.edu", role: "Secretary", inGoodStanding: true, points: 15, filmMinutes: 19, inductionStatus: "Inducted" },
+    { id: 7, name: "Michael Brown", email: "michael.brown@sas.edu", role: "Member", inGoodStanding: true, points: 11, filmMinutes: 16, inductionStatus: "Inducted" },
+    { id: 8, name: "Olivia Davis", email: "olivia.davis@sas.edu", role: "Member", inGoodStanding: false, points: 6, filmMinutes: 9, inductionStatus: "Nominee" },
+    { id: 9, name: "Ethan Garcia", email: "ethan.garcia@sas.edu", role: "Member", inGoodStanding: true, points: 13, filmMinutes: 17, inductionStatus: "Inducted" },
+    { id: 10, name: "Ava Martinez", email: "ava.martinez@sas.edu", role: "Member", inGoodStanding: true, points: 17, filmMinutes: 23, inductionStatus: "Inducted" },
+    { id: 11, name: "Noah Johnson", email: "noah.johnson@sas.edu", role: "Member", inGoodStanding: true, points: 9, filmMinutes: 13, inductionStatus: "Inducted" },
+    { id: 12, name: "Isabella Taylor", email: "isabella.taylor@sas.edu", role: "Member", inGoodStanding: false, points: 7, filmMinutes: 10, inductionStatus: "Nominee" },
   ]);
 
   const [recentNews] = useState([
@@ -40,6 +42,31 @@ const Dashboard = () => {
     { id: 2, title: "New Industry Mentorship Program Launch", date: "Dec 10, 2024", category: "Programs" },
     { id: 3, title: "Chapter Leadership Summit Registration Open", date: "Dec 5, 2024", category: "Events" },
   ]);
+
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editMember, setEditMember] = useState(null);
+
+  const handleEditClick = (member) => {
+    setEditMember({ ...member });
+    setEditDialogOpen(true);
+  };
+
+  const handleEditChange = (field, value) => {
+    setEditMember((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleEditSave = () => {
+    setChapterMembers((prev) =>
+      prev.map((m) => (m.id === editMember.id ? { ...editMember, points: Number(editMember.points), filmMinutes: Number(editMember.filmMinutes) } : m))
+    );
+    setEditDialogOpen(false);
+    setEditMember(null);
+  };
+
+  const handleEditCancel = () => {
+    setEditDialogOpen(false);
+    setEditMember(null);
+  };
 
   const navigate = useNavigate();
 
@@ -53,13 +80,18 @@ const Dashboard = () => {
               <Film className="h-8 w-8 text-blue-600" />
               <span className="text-xl font-bold text-gray-900">HSCA</span>
             </Link>
+            <div className="hidden md:flex space-x-8">
+              <Link to="/about" className="text-gray-700 hover:text-blue-600 transition-colors">About Us</Link>
+              <Link to="/chapters" className="text-gray-700 hover:text-blue-600 transition-colors">Become a Chapter</Link>
+              <Link to="/newsletter" className="text-gray-700 hover:text-blue-600 transition-colors">Newsletter</Link>
+            </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">Welcome back, {user.name}</span>
               <Button variant="outline" size="sm" onClick={() => navigate("/profile")}>
                 <User className="h-4 w-4 mr-2" />
                 Profile
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => navigate("/")}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
               </Button>
@@ -76,11 +108,11 @@ const Dashboard = () => {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid grid-cols-4 w-full max-w-xl">
+          <TabsList className="grid grid-cols-3 w-full max-w-xl">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="chapter">Chapter</TabsTrigger>
+            <TabsTrigger value="chapter">Members</TabsTrigger>
             <TabsTrigger value="manage">Manage Chapter</TabsTrigger>
-            <TabsTrigger value="news">News</TabsTrigger>
+            {/* <TabsTrigger value="news">News</TabsTrigger> */}
           </TabsList>
 
           {/* Overview Tab */}
@@ -221,7 +253,7 @@ const Dashboard = () => {
                             </Badge>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap space-x-2">
-                            <Button size="sm">Edit</Button>
+                            <Button size="sm" onClick={() => handleEditClick(member)}>Edit</Button>
                             <Button variant="outline" size="sm">Copy</Button>
                           </td>
                         </tr>
@@ -234,6 +266,7 @@ const Dashboard = () => {
           </TabsContent>
 
           {/* News Tab */}
+          {/*
           <TabsContent value="news" className="space-y-6">
             <Card className="border-0 shadow-lg">
               <CardHeader>
@@ -258,8 +291,56 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </TabsContent>
+          */}
         </Tabs>
       </div>
+
+      {/* Edit Member Dialog */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Member</DialogTitle>
+          </DialogHeader>
+          {editMember && (
+            <form className="space-y-4" onSubmit={e => { e.preventDefault(); handleEditSave(); }}>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Name</label>
+                  <Input value={editMember.name} onChange={e => handleEditChange("name", e.target.value)} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Email</label>
+                  <Input value={editMember.email} onChange={e => handleEditChange("email", e.target.value)} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Role</label>
+                  <Input value={editMember.role} onChange={e => handleEditChange("role", e.target.value)} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Points</label>
+                  <Input type="number" value={editMember.points} onChange={e => handleEditChange("points", e.target.value)} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Film Minutes</label>
+                  <Input type="number" value={editMember.filmMinutes} onChange={e => handleEditChange("filmMinutes", e.target.value)} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Induction Status</label>
+                  <Input value={editMember.inductionStatus} onChange={e => handleEditChange("inductionStatus", e.target.value)} />
+                </div>
+                <div className="col-span-2 flex items-center space-x-2">
+                  <input type="checkbox" checked={editMember.inGoodStanding} onChange={e => handleEditChange("inGoodStanding", e.target.checked)} />
+                  <span>In Good Standing</span>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="button" variant="outline" onClick={handleEditCancel}>Cancel</Button>
+                <Button type="submit">Save</Button>
+              </DialogFooter>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
